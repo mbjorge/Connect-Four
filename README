@@ -1,0 +1,21 @@
+author: Michael Bjorge
+email: mbjorge@student.umass.edu
+
+ConnectFourServer is the server. One person runs that.
+
+ConnectFourClient is the client. Both players run that.
+
+The two players then play a game of Connect Four.
+
+The object of the game is to get 4 of your pieces (either X or O) in a row horizontally, diagonally, or vertically.
+
+You select which column to add a piece to. Your piece is added to the lowest, non-occupied place in the column. (In real life, you drop your piece on top of the stack of pieces already in the column).
+
+Play alternates.
+
+The first player to connect gets to be player 1 the first time.
+If subsequent games are played, the player to go first alternates.
+
+If no 4-in-row is made once the board is filled, the game is a tie.
+
+Enjoy.
