@@ -16,39 +16,83 @@ for row in range (0,height):
 
 
 
-def print_board(board):
-	"""Print a graphical representation of board. X is P1, O is P2."""
-
+def print_board(board, newPlay):
+	"""Print a graphical representation of the board.
+	Human is X. Computer is 0.
+	@newPlay - the column most recently played in"""
+	
 	clearScreen()
 	
-	print ""
+	boardString = ''
+	boardString += "\n\n"
+
+	newPiece = 0 #Used to identify if the new piece has been added with the < > identifiers
 	
-	#Print board
+	#Make the string
 	for row in range(height-1, -1, -1): #Start at the top and go down
 	
-		print "|",
+		boardString += "|"
 		
 		for col in range(0,width): #Start at the left and go right
-		
-			if 1 == board[(col, row)]: #Player 1
-				print " X ",
-			elif 10 == board[(col, row)]: #Player 2
-				print " O ",
-			else:	# Empty
-				print "   ",
+
+			if row == height-1 and newPlay == col and board[(newPlay,height-1)] != 0:
+				if 1 == board[(col, row)]: #Player 1
+					boardString += "<X>"
+				elif 10 == board[(col, row)]: #Computer
+					boardString += "<O>"
+				else:	# Empty
+					boardString += "   "
+				newPiece = -1
+				newPlay = -1
+			else:
+				if newPiece != 1:
+					if 1 == board[(col, row)]: #Player 1
+						boardString += " X "
+					elif 10 == board[(col, row)]: #Computer
+						boardString += " O "
+					else:	# Empty
+						boardString += "   "
+
+				if newPiece == 1 and newPlay == col:
+					if 1 == board[(col, row)]: #Player 1
+						boardString += "<X>"
+					elif 10 == board[(col, row)]: #Computer
+						boardString += "<O>"
+					else:	# Empty
+						boardString += "   "
+					newPiece = -1
+					newPlay = -1
+				elif newPiece == 1:
+					if 1 == board[(col, row)]: #Player 1
+						boardString += " X "
+					elif 10 == board[(col, row)]: #Computer
+						boardString += " O "
+					else:	# Empty
+						boardString += "   "
+
+			if newPlay == col and newPiece == 0 and row > 0 and board[(col, row-1)] != 0:
+				newPiece += 1				
 				
-		print "|\n"
+		boardString += "|\n\n"
 
-	#Print label on the bottom
-	print " ",
-	for col in range(0, width):
-		print "- -",
+	#Add column labels on the bottom
+	for col in range(0, width-1):
+		boardString += "- - "
 		
-	print "\n ",
+	boardString += "\n "
 	for col in range(0, width):
-		print " {} " .format(col),
+		boardString += " {} " .format(col)
 
-	print ""
+	boardString += "\n"
+
+	win = winner(board)
+
+	if win:
+		if -1 == win:
+			boardString += "\n\nIt's a tie!"
+
+	print boardString
+
 
 def clearScreen():
 	for i in range(100):
@@ -61,13 +105,14 @@ def play_computer(board, difficulty):
 
 	while True:
 	
-		print_board(board)
+		print_board(board, col)
+		print col
 		
 		if p1_turn:
 			if col != -1:
 				print "\nComputer played in column:", col
 			#score, col = minimax(board,p1_turn,difficulty, board)
-			put_piece(board,p1_turn)
+			tmp, col = put_piece(board,p1_turn,-1)
 			p1_turn = False
 		else: #Computer turn
 			print "\nThinking..."
@@ -76,7 +121,7 @@ def play_computer(board, difficulty):
 			p1_turn = True
 
 		if winner(board):
-			print_board(board)
+			print_board(board, col)
 			if 1 == winner(board):
 				sys.exit("Human player wins!")
 			else:
@@ -119,8 +164,8 @@ def put_piece(board, p1, computerColumn=-1):
 	for row in range(0, height):
 		if board[(col, row)] == 0:
 			board[(col, row)] = piece
-			return row
-	return -1
+			return row, col
+	return -1, -1
 	
 
 def winner(board):
@@ -139,7 +184,7 @@ def winner(board):
 				return board[(col,row)]
 
 	#Check diagonal, top left to bottom right
-	for row in range(height-1, 3, -1):
+	for row in range(height-1, 2, -1):
 		for col in range(0,width-3):
 			if board[(col,row)] != 0 and board[(col,row)] == board[(col+1,row-1)] and board[(col+1,row-1)] == board[(col+2,row-2)] and board[(col+2,row-2)] == board[(col+3,row-3)]:
 				return board[(col,row)]
@@ -154,7 +199,7 @@ def winner(board):
 	for col in range(0,width):
 		if 0 == board[(col,height-1)]:
 			break
-		elif col == width -1:
+		elif col == width-1:
 			sys.exit("The game is tie. Nobody is a winner")
 
 	return 0 #No winner
@@ -188,7 +233,7 @@ def score_board(board):
 			 	score += (int(tmp/10))**3 - (tmp%10)**3 ##Since Comp is represented by 10 and Human by 1, Comp is tens digit, Human is ones digit
 
 	#Check diagonal, top left to bottom right
-	for row in range(height-1, 3, -1):
+	for row in range(height-1, 2, -1):
 		for col in range(0,width-3):
 			tmp = board[(col,row)] + board[(col+1,row-1)] + board[(col+2,row-2)] + board[(col+3,row-3)]
 			if tmp == 40:
@@ -233,7 +278,7 @@ def minimax(maxOrmin, p1, depth, board):
 			if board[(col, height-1)] != 0:
 				continue
 
-			rowFilled = put_piece(board, p1, col)
+			rowFilled, tmp = put_piece(board, p1, col)
 			if rowFilled == -1:
 				continue			
 			
