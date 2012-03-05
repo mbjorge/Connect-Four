@@ -81,7 +81,7 @@ def print_board(board, newPlay):
 		
 	boardString += "\n "
 	for col in range(0, width):
-		boardString += " {} " .format(col)
+		boardString += " {0} " .format(col)
 
 	boardString += "\n"
 
@@ -140,7 +140,7 @@ def put_piece(board, p1, computerColumn=-1):
 
 	#Human turn
 	if -1 == computerColumn: 
-		message = "\nPlayer {}'s turn.\nWhich column?\n>> " .format('X')
+		message = "\nPlayer {0}'s turn.\nWhich column?\n>> " .format('X')
 
 	
 		choice = raw_input(message)	

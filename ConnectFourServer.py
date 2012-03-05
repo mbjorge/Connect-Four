@@ -150,7 +150,7 @@ def board_to_string(board, newPlay):
 		
 	boardString += "\n "
 	for col in range(0, width):
-		boardString += " {} " .format(col)
+		boardString += " {0} " .format(col)
 
 	boardString += "\n"
 
@@ -160,7 +160,7 @@ def board_to_string(board, newPlay):
 		if -1 == win:
 			boardString += "\n\nIt's a tie!"
 		else:
-			boardString += "\n\n!!!!!!!Player {} wins!!!!!!!".format(win)
+			boardString += "\n\n!!!!!!!Player {0} wins!!!!!!!".format(win)
 
 	return boardString
 
@@ -193,7 +193,7 @@ def play(player1, player2):
 		if winner(board):
 			time.sleep(1)
 			player2.send(board_to_string(board, col))
-			print "Player {} won".format(winner(board))
+			print "Player {0} won".format(winner(board))
 			break
 
 		#Player 2 Turn
@@ -215,7 +215,7 @@ def play(player1, player2):
 		if winner(board):
 			time.sleep(1)
 			player1.send(board_to_string(board, col))
-			print "Player {} won".format(winner(board))
+			print "Player {0} won".format(winner(board))
 			break
 
 play(player1, player2)
@@ -238,7 +238,7 @@ while play_again:
 	p2Ans = player2.recv(1)
 	print "Recieve from 2"
 
-	print "{}, {}".format(p1Ans, p2Ans)
+	print "{0}, {1}".format(p1Ans, p2Ans)
 	
 	if p1Ans == 'y' and p2Ans == 'y':
 		for row in range (0,height):
