@@ -10,7 +10,11 @@ port = 6667
 
 client.connect((host,port))
 
-os.system('CLS')
+def clearScreen():
+	for i in range(100):
+		print "\n"
+
+clearScreen()
 print "\nConnected!\n"
 
 
@@ -31,11 +35,12 @@ def check_board(board):
 
 	return validColumns
 
+
 def play():
 	while True:
 
 		board = client.recv(1024)
-		os.system('CLS')
+		clearScreen()
 		print board
 
 		if board[-1] == '!': #Somebody has won
@@ -50,7 +55,7 @@ def play():
 		client.send(str(col))
 		
 		board = client.recv(1024)			
-		os.system('CLS')
+		clearScreen()
 		print board
 
 		if board[-1] == '!':
@@ -73,7 +78,7 @@ while True:
 	playAgain = client.recv(1024)
 
 	print "\n"
-	os.system('CLS')
+	clearScreen()
 	
 	if playAgain == "Let's play!": #Start a new game
 		print "\nWaiting for other person to play..."
