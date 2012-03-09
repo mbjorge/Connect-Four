@@ -67,7 +67,7 @@ def winner(board):
 				return board[(col,row)]
 
 	#Check diagonal, top left to bottom right
-	for row in range(height-1, 3, -1):
+	for row in range(height-1, 2, -1):
 		for col in range(0,width-3):
 			if board[(col,row)] != 0 and board[(col,row)] == board[(col+1,row-1)] and board[(col+1,row-1)] == board[(col+2,row-2)] and board[(col+2,row-2)] == board[(col+3,row-3)]:
 				return board[(col,row)]
@@ -95,6 +95,7 @@ def board_to_string(board, newPlay):
 	boardString = ''
 	boardString += "\n\n"
 
+
 	newPiece = 0 #Used to identify if the new piece has been added with the < > identifiers
 	
 	#Make the string
@@ -110,7 +111,7 @@ def board_to_string(board, newPlay):
 				elif 2 == board[(col, row)]: #Player 2
 					boardString += "<O>"
 				else:	# Empty
-					boardString += "   "
+					boardString += " ? 
 				newPiece = -1
 				newPlay = -1
 			else:
